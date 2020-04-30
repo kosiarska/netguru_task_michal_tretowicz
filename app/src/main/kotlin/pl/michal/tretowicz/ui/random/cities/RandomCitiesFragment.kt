@@ -1,5 +1,6 @@
 package pl.michal.tretowicz.ui.random.cities
 
+import android.content.res.Configuration
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_random_cities.*
 import pl.michal.tretowicz.R
@@ -28,7 +29,10 @@ class RandomCitiesFragment : BaseFragment(), RandomCitiesMvpView {
 
         list.adapter = adapter
         adapter.onClickListener = View.OnClickListener {
-            presenter.itemClicked(it.tag as CityColorDate)
+
+            val tabletSize = resources.getBoolean(R.bool.isTablet)
+            val orientation = this.resources.configuration.orientation
+            presenter.itemClicked(it.tag as CityColorDate,tabletSize && orientation == Configuration.ORIENTATION_LANDSCAPE)
         }
     }
 

@@ -1,6 +1,7 @@
 package pl.michal.tretowicz.ui.main
 
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
@@ -8,12 +9,14 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.michal.tretowicz.R
 import pl.michal.tretowicz.data.ToastManager
-import javax.inject.Inject
 import pl.michal.tretowicz.ui.base.BaseActivity
 import pl.michal.tretowicz.ui.random.cities.RandomCitiesFragment
+import pl.michal.tretowicz.ui.random.cities.details.DetailsFragment
 import pl.michal.tretowicz.ui.splash.SplashFragment
 import pl.michal.tretowicz.util.extension.gone
 import pl.michal.tretowicz.util.extension.visible
+import javax.inject.Inject
+
 
 /**
  * Created by Michał Trętowicz
@@ -30,7 +33,16 @@ class MainActivity : BaseActivity(), MainMvpView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        val tabletSize = resources.getBoolean(R.bool.isTablet)
+        val orientation = this.resources.configuration.orientation
+        if (tabletSize && orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_main_tablet)
+        } else {
+            setContentView(R.layout.activity_main)
+        }
+
+
         activityComponent.inject(this)
 
         presenter.attachView(this)
@@ -51,11 +63,15 @@ class MainActivity : BaseActivity(), MainMvpView {
     }
 
     override fun showSplashScreen() {
-        replaceFragment(SplashFragment())
+        replaceFragment(R.id.frame, SplashFragment())
     }
 
     override fun showMainScreen() {
-        replaceFragment(RandomCitiesFragment())
+        replaceFragment(R.id.frame, RandomCitiesFragment())
+    }
+
+    override fun showMapScreen(cityName: String) {
+        replaceFragment(R.id.detailsFrame, DetailsFragment.newInstance(cityName))
     }
 
     override fun showToolbar() {
@@ -66,8 +82,8 @@ class MainActivity : BaseActivity(), MainMvpView {
         toolbar.gone()
     }
 
-    private fun replaceFragment(fragment : Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.frame, fragment).commit()
+    private fun replaceFragment(id : Int, fragment : Fragment) {
+        supportFragmentManager.beginTransaction().replace(id, fragment).commit()
     }
 
     override fun onBackPressed() {

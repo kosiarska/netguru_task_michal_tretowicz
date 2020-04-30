@@ -32,13 +32,13 @@
 
         <activity
             android:name=".ui.random.cities.details.DetailsActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_details" />
+            android:label="@string/title_activity_details"
+            android:screenOrientation="portrait" />
 
+        <!--                    android:configChanges="orientation|screenSize"
+        -->
         <activity
             android:name=".ui.main.MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

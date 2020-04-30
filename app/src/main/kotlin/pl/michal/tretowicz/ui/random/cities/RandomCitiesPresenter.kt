@@ -8,6 +8,8 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import org.joda.time.DateTime
 import pl.michal.tretowicz.data.DataManager
+import pl.michal.tretowicz.data.RxEventBus
+import pl.michal.tretowicz.data.event.EventShowMap
 import pl.michal.tretowicz.data.model.CityColorDate
 import pl.michal.tretowicz.injection.ConfigPersistent
 import pl.michal.tretowicz.ui.base.BasePresenter
@@ -23,7 +25,7 @@ interface RandomCitiesMvpView : MvpView {
 }
 
 @ConfigPersistent
-class RandomCitiesPresenter @Inject constructor(private val dataManager: DataManager) : BasePresenter<RandomCitiesMvpView>() {
+class RandomCitiesPresenter @Inject constructor(private val dataManager: DataManager, private val rxEventBus: RxEventBus) : BasePresenter<RandomCitiesMvpView>() {
 
     private val cities = listOf("Gdańsk", "Warszawa", "Poznań", "Białystok", "Wrocław", "Katowice", "Kraków")
     private val colors = listOf("Yellow", "Green", "Blue", "Red", "Black", "White")
@@ -64,7 +66,11 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
                 ).addTo(subscriptions)
     }
 
-    fun itemClicked(cityColorDate: CityColorDate) {
-        view.showDetailsScreen(cityColorDate.city, cityColorDate.color)
+    fun itemClicked(cityColorDate: CityColorDate, forTablet : Boolean) {
+        if(forTablet) {
+            rxEventBus.post(EventShowMap(cityColorDate.city))
+        } else {
+            view.showDetailsScreen(cityColorDate.city, cityColorDate.color)
+        }
     }
 }

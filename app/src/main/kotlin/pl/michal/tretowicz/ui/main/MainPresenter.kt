@@ -8,6 +8,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import pl.michal.tretowicz.data.DataManager
 import pl.michal.tretowicz.data.RxEventBus
+import pl.michal.tretowicz.data.event.EventShowMap
 import pl.michal.tretowicz.data.repository.session.SessionManager
 import pl.michal.tretowicz.injection.ConfigPersistent
 import pl.michal.tretowicz.ui.base.BasePresenter
@@ -20,6 +21,7 @@ interface MainMvpView : MvpView {
     fun hideToolbar()
     fun showMainScreen()
     fun showToolbar()
+    fun showMapScreen(cityName: String)
 
 }
 
@@ -45,6 +47,17 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
                         onNext = {
                             view.showMainScreen()
                             view.showToolbar()
+                        },
+                        onError = {
+
+                        }
+                ).addTo(subscriptions)
+
+        rxEventBus.filteredObservable(EventShowMap::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            view.showMapScreen(it.cityName)
                         },
                         onError = {
 
