@@ -7,6 +7,9 @@ import pl.michal.tretowicz.R
 import pl.michal.tretowicz.data.ToastManager
 import javax.inject.Inject
 import pl.michal.tretowicz.ui.base.BaseActivity
+import pl.michal.tretowicz.ui.splash.SplashFragment
+import pl.michal.tretowicz.util.extension.gone
+import pl.michal.tretowicz.util.extension.visible
 
 /**
  * Created by Michał Trętowicz
@@ -30,10 +33,27 @@ class MainActivity : BaseActivity(), MainMvpView {
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.detachView()
+    }
+
+    override fun showSplashScreen() {
+        supportFragmentManager.beginTransaction().replace(R.id.frame, SplashFragment()).commit()
+    }
+
+    override fun showToolbar() {
+        toolbar.visible()
+    }
+
+    override fun hideToolbar() {
+        toolbar.gone()
+    }
+
+    override fun showMainScreen() {
+       
     }
 }

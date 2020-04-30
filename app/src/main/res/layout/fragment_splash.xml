@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_color="#0986EA"
+        android:layout_marginTop="@dimen/vertical_margin"
+        app:civ_border_width="2dp" />
+
+    <TextView
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center"
+        android:textSize="@dimen/_18ssp"
+        android:fontFamily="@font/bold"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:text="@string/splash_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:id="@+id/netguruLogo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp" />
+</LinearLayout>
