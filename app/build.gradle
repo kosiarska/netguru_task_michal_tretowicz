@@ -25,10 +25,10 @@ android {
         // You must set up an environment var before release signing
         // Run: export APP_KEY={password}
         release {
-            storeFile file('keystore/release.keystore')
-            keyAlias 'release'
-            storePassword "release"
-            keyPassword "release"
+            storeFile file('keystore/debug.keystore')
+            keyAlias 'androiddebugkey'
+            storePassword 'android'
+            keyPassword 'android'
         }
 
         debug {
@@ -135,6 +135,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
     releaseImplementation 'com.willowtreeapps.hyperion:hyperion-core-no-op:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-crash:0.9.27'
@@ -223,4 +225,3 @@ task forceCleanAndRebuildDebug(group: 'proexe', description: 'Delete 2 build dir
     delete "../build"
     tasks = ['clean', 'assembleDebug']
 }
-

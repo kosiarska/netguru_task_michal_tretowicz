@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.michal.tretowicz">
 
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -16,17 +18,27 @@
         android:required="true" />
 
     <application
-        android:name="pl.michal.tretowicz.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
         <activity
-            android:name="pl.michal.tretowicz.ui.main.MainActivity"
+            android:name=".ui.random.cities.details.DetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_details" />
+
+        <activity
+            android:name=".ui.main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
-
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -36,6 +48,7 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".util.BackgroundGeocoder" />
     </application>
 
 </manifest>
