@@ -24,6 +24,7 @@ interface MainMvpView : MvpView {
     fun showMapScreen(cityName: String)
     fun setToolbarTitle(cityName: String)
     fun setToolbarBackground(color: Int)
+    fun hideSplashScreen()
 
 }
 
@@ -48,6 +49,7 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
                     .subscribeBy(
                             onNext = {
                                 shownSplashOnce = true
+                                view.hideSplashScreen()
                                 view.showMainScreen()
                                 view.showToolbar()
                             },
@@ -56,6 +58,7 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
                             }
                     ).addTo(subscriptions)
         } else {
+            view.hideSplashScreen()
             view.showMainScreen()
         }
 

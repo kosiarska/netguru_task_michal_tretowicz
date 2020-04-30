@@ -63,7 +63,7 @@ class MainActivity : BaseActivity(), MainMvpView {
     }
 
     override fun showSplashScreen() {
-        replaceFragment(R.id.frame, SplashFragment())
+        replaceFragment(R.id.frameSplash, SplashFragment())
     }
 
     override fun showMainScreen() {
@@ -72,6 +72,13 @@ class MainActivity : BaseActivity(), MainMvpView {
 
     override fun showMapScreen(cityName: String) {
         replaceFragment(R.id.detailsFrame, DetailsFragment.newInstance(cityName))
+    }
+
+    override fun hideSplashScreen() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.frameSplash)
+        if(fragment != null) {
+            supportFragmentManager.beginTransaction().hide(fragment).commit()
+        }
     }
 
     override fun showToolbar() {
