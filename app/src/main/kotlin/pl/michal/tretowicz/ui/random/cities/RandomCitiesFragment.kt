@@ -1,10 +1,13 @@
 package pl.michal.tretowicz.ui.random.cities
 
+import android.view.View
 import kotlinx.android.synthetic.main.fragment_random_cities.*
 import pl.michal.tretowicz.R
 import pl.michal.tretowicz.data.model.CityColorDate
 import pl.michal.tretowicz.ui.base.BaseFragment
 import pl.michal.tretowicz.ui.random.cities.adapter.RandomCitiesAdapter
+import pl.michal.tretowicz.ui.random.cities.details.DetailsActivity
+import pl.michal.tretowicz.util.extension.startActivity
 import javax.inject.Inject
 
 
@@ -24,6 +27,19 @@ class RandomCitiesFragment : BaseFragment(), RandomCitiesMvpView {
         presenter.attachView(this)
 
         list.adapter = adapter
+        adapter.onClickListener = View.OnClickListener {
+            presenter.itemClicked(it.tag as CityColorDate)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onPause()
     }
 
     override fun detachView() {
@@ -33,5 +49,9 @@ class RandomCitiesFragment : BaseFragment(), RandomCitiesMvpView {
 
     override fun addCity(cityColorDate: CityColorDate) {
         adapter.addCity(cityColorDate)
+    }
+
+    override fun showDetailsScreen(city: String, color: Int) {
+        startActivity<DetailsActivity>(DetailsActivity.EXTRA_TEXT to city, DetailsActivity.EXTRA_COLOR to color)
     }
 }

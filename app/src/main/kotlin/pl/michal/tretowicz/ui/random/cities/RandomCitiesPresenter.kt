@@ -3,6 +3,7 @@ package pl.michal.tretowicz.ui.random.cities
 import android.graphics.Color
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import org.joda.time.DateTime
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 interface RandomCitiesMvpView : MvpView {
     fun addCity(cityColorDate: CityColorDate)
+    fun showDetailsScreen(city: String, color: Int)
 }
 
 @ConfigPersistent
@@ -37,12 +39,20 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
 
     private val random = Random()
 
-    override fun attachView(view: RandomCitiesMvpView) {
-        super.attachView(view)
+    private fun emitValue() {
+        val city = cities[random.nextInt(cities.size - 1)]
+        val color = colorMap[colors[random.nextInt(colors.size - 1)]]!!
+        val cityColorDate = CityColorDate(city, color, DateTime.now())
+        view.addCity(cityColorDate)
+    }
 
-        emitValue()
+    fun onPause() {
+        subscriptions.dispose()
+        subscriptions = CompositeDisposable()
+    }
 
-        Observable.interval(5, TimeUnit.SECONDS)
+    fun onResume() {
+        Observable.interval(0, 5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
@@ -54,10 +64,7 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
                 ).addTo(subscriptions)
     }
 
-    private fun emitValue() {
-        val city = cities[random.nextInt(cities.size - 1)]
-        val color = colorMap[colors[random.nextInt(colors.size - 1)]]!!
-        val cityColorDate = CityColorDate(city, color, DateTime.now())
-        view.addCity(cityColorDate)
+    fun itemClicked(cityColorDate: CityColorDate) {
+        view.showDetailsScreen(cityColorDate.city, cityColorDate.color)
     }
 }

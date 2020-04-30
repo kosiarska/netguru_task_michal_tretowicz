@@ -18,6 +18,7 @@ class RandomCitiesAdapter @Inject constructor(@ActivityContext private val conte
 
     private val layoutInflater = LayoutInflater.from(context)
     private val list = arrayListOf<CityColorDate>()
+    var onClickListener : View.OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(layoutInflater.inflate(R.layout.item_city, parent, false))
@@ -26,7 +27,7 @@ class RandomCitiesAdapter @Inject constructor(@ActivityContext private val conte
     override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], onClickListener)
     }
 
     fun addCity(cityColorDate: CityColorDate) {
@@ -40,9 +41,12 @@ class RandomCitiesAdapter @Inject constructor(@ActivityContext private val conte
 }
 
 class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(data: CityColorDate) {
+    fun bind(data: CityColorDate, onClickListener: View.OnClickListener?) {
         itemView.city.text = data.city
         itemView.city.setTextColor(data.color)
         itemView.date.text = data.dateOfEmission.toString("HH:mm:ss dd.MM.yyyy")
+
+        itemView.tag = data
+        itemView.setOnClickListener(onClickListener)
     }
 }

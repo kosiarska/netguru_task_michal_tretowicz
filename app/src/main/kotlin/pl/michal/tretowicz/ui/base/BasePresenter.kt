@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
  */
 open class BasePresenter<T : MvpView> : Presenter<T> {
 
-    val subscriptions = CompositeDisposable()
+    var subscriptions = CompositeDisposable()
 
     private var _view: T? = null
     val view: T
