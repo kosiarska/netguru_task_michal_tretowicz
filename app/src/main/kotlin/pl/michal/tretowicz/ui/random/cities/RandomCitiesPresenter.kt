@@ -78,6 +78,8 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
             scheduleUpdates()
         }
 
+        view.showData(list)
+
         rxEventBus.filteredObservable(EventAppInForeground::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
