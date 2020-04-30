@@ -2,10 +2,14 @@ package pl.michal.tretowicz.ui.main
 
 
 import android.graphics.Color
+import android.graphics.PorterDuff
+import androidx.core.content.ContextCompat
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.synthetic.main.activity_details.*
+import pl.michal.tretowicz.R
 import pl.michal.tretowicz.data.DataManager
 import pl.michal.tretowicz.data.RxEventBus
 import pl.michal.tretowicz.data.event.EventShowMap
@@ -25,6 +29,8 @@ interface MainMvpView : MvpView {
     fun setToolbarTitle(cityName: String)
     fun setToolbarBackground(color: Int)
     fun hideSplashScreen()
+    fun setToolbarTitleGray()
+    fun setToolbarTitleWhite()
 
 }
 
@@ -69,6 +75,12 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
                             view.showMapScreen(it.cityName)
                             view.setToolbarTitle(it.cityName)
                             view.setToolbarBackground(it.color)
+
+                            if(it.color == Color.WHITE || it.color == Color.YELLOW) {
+                                view.setToolbarTitleGray()
+                            } else {
+                                view.setToolbarTitleWhite()
+                            }
                         },
                         onError = {
 

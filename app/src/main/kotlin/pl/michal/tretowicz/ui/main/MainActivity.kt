@@ -2,9 +2,11 @@ package pl.michal.tretowicz.ui.main
 
 
 import android.content.res.Configuration
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.michal.tretowicz.R
@@ -99,6 +101,16 @@ class MainActivity : BaseActivity(), MainMvpView {
 
     private fun replaceFragment(id : Int, fragment : Fragment) {
         supportFragmentManager.beginTransaction().replace(id, fragment).commit()
+    }
+
+    override fun setToolbarTitleGray() {
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.gray))
+        toolbar.navigationIcon?.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_ATOP)
+    }
+
+    override fun setToolbarTitleWhite() {
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+        toolbar.navigationIcon?.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
     }
 
     override fun onBackPressed() {
