@@ -2,11 +2,15 @@ package pl.michal.tretowicz.ui.main
 
 
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.michal.tretowicz.R
 import pl.michal.tretowicz.data.ToastManager
 import javax.inject.Inject
 import pl.michal.tretowicz.ui.base.BaseActivity
+import pl.michal.tretowicz.ui.random.cities.RandomCitiesFragment
 import pl.michal.tretowicz.ui.splash.SplashFragment
 import pl.michal.tretowicz.util.extension.gone
 import pl.michal.tretowicz.util.extension.visible
@@ -22,6 +26,8 @@ class MainActivity : BaseActivity(), MainMvpView {
     @Inject
     lateinit var toastManager: ToastManager
 
+    private var doubleBackToExitPressedOnce = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,6 +40,9 @@ class MainActivity : BaseActivity(), MainMvpView {
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     override fun onDestroy() {
@@ -42,7 +51,11 @@ class MainActivity : BaseActivity(), MainMvpView {
     }
 
     override fun showSplashScreen() {
-        supportFragmentManager.beginTransaction().replace(R.id.frame, SplashFragment()).commit()
+        replaceFragment(SplashFragment())
+    }
+
+    override fun showMainScreen() {
+        replaceFragment(RandomCitiesFragment())
     }
 
     override fun showToolbar() {
@@ -53,7 +66,19 @@ class MainActivity : BaseActivity(), MainMvpView {
         toolbar.gone()
     }
 
-    override fun showMainScreen() {
-       
+    private fun replaceFragment(fragment : Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.frame, fragment).commit()
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.press_twice_to_exit), Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

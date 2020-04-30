@@ -4,5 +4,6 @@
     <color name="primary_dark">#ddd</color>
     <color name="accent">@color/white</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray">#CCCBCB</color>
 
 </resources>

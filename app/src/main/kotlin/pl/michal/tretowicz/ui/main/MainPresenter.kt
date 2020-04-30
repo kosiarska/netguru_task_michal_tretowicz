@@ -3,6 +3,7 @@ package pl.michal.tretowicz.ui.main
 
 import android.graphics.Color
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import pl.michal.tretowicz.data.DataManager
@@ -39,6 +40,7 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
         view.hideToolbar()
 
         Observable.just(true).delaySubscription(2, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
                             view.showMainScreen()
