@@ -14,14 +14,15 @@ import pl.michal.tretowicz.data.model.CityColorDate
 import pl.michal.tretowicz.injection.ConfigPersistent
 import pl.michal.tretowicz.ui.base.BasePresenter
 import pl.michal.tretowicz.ui.base.MvpView
+import java.text.Collator
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 interface RandomCitiesMvpView : MvpView {
-    fun addCity(cityColorDate: CityColorDate)
     fun showDetailsScreen(city: String, color: Int)
+    fun showData(list: ArrayList<CityColorDate>)
 }
 
 @ConfigPersistent
@@ -39,13 +40,18 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
             colors[5] to Color.WHITE
     )
 
+    private val list = arrayListOf<CityColorDate>()
     private val random = Random()
 
     private fun emitValue() {
         val city = cities[random.nextInt(cities.size - 1)]
         val color = colorMap[colors[random.nextInt(colors.size - 1)]]!!
         val cityColorDate = CityColorDate(city, color, DateTime.now())
-        view.addCity(cityColorDate)
+
+        list.add(cityColorDate)
+        list.sortWith(Comparator { a, b -> Collator.getInstance().compare(a.city, b.city) })
+
+        view.showData(list)
     }
 
     fun onPause() {

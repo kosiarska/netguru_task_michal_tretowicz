@@ -17,7 +17,7 @@ import javax.inject.Inject
 class RandomCitiesAdapter @Inject constructor(@ActivityContext private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
-    private val list = arrayListOf<CityColorDate>()
+    private var list = arrayListOf<CityColorDate>()
     var onClickListener : View.OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,14 +30,10 @@ class RandomCitiesAdapter @Inject constructor(@ActivityContext private val conte
         holder.bind(list[position], onClickListener)
     }
 
-    fun addCity(cityColorDate: CityColorDate) {
-        list.add(cityColorDate)
-
-        list.sortWith(Comparator { a, b -> Collator.getInstance().compare(a.city, b.city) })
-
+    fun showData(list: ArrayList<CityColorDate>) {
+        this.list = list
         notifyDataSetChanged()
     }
-
 }
 
 class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

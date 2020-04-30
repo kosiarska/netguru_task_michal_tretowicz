@@ -9,6 +9,7 @@ import pl.michal.tretowicz.ui.base.BaseFragment
 import pl.michal.tretowicz.ui.random.cities.adapter.RandomCitiesAdapter
 import pl.michal.tretowicz.ui.random.cities.details.DetailsActivity
 import pl.michal.tretowicz.util.extension.startActivity
+import java.util.ArrayList
 import javax.inject.Inject
 
 
@@ -51,8 +52,8 @@ class RandomCitiesFragment : BaseFragment(), RandomCitiesMvpView {
         presenter.detachView()
     }
 
-    override fun addCity(cityColorDate: CityColorDate) {
-        adapter.addCity(cityColorDate)
+    override fun showData(list: ArrayList<CityColorDate>) {
+        adapter.showData(list)
     }
 
     override fun showDetailsScreen(city: String, color: Int) {
