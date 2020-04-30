@@ -68,7 +68,7 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
 
     fun itemClicked(cityColorDate: CityColorDate, forTablet : Boolean) {
         if(forTablet) {
-            rxEventBus.post(EventShowMap(cityColorDate.city))
+            rxEventBus.post(EventShowMap(cityColorDate.city, cityColorDate.color))
         } else {
             view.showDetailsScreen(cityColorDate.city, cityColorDate.color)
         }

@@ -22,6 +22,8 @@ interface MainMvpView : MvpView {
     fun showMainScreen()
     fun showToolbar()
     fun showMapScreen(cityName: String)
+    fun setToolbarTitle(cityName: String)
+    fun setToolbarBackground(color: Int)
 
 }
 
@@ -58,6 +60,8 @@ constructor(private val rxEventBus: RxEventBus, private val sessionManager: Sess
                 .subscribeBy(
                         onNext = {
                             view.showMapScreen(it.cityName)
+                            view.setToolbarTitle(it.cityName)
+                            view.setToolbarBackground(it.color)
                         },
                         onError = {
 

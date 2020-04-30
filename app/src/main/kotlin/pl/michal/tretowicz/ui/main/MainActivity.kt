@@ -82,6 +82,14 @@ class MainActivity : BaseActivity(), MainMvpView {
         toolbar.gone()
     }
 
+    override fun setToolbarBackground(color: Int) {
+        toolbar.setBackgroundColor(color)
+    }
+
+    override fun setToolbarTitle(cityName: String) {
+        supportActionBar?.title = cityName
+    }
+
     private fun replaceFragment(id : Int, fragment : Fragment) {
         supportFragmentManager.beginTransaction().replace(id, fragment).commit()
     }

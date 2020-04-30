@@ -15,7 +15,6 @@ import pl.michal.tretowicz.R
 import pl.michal.tretowicz.ui.base.BaseFragment
 import pl.michal.tretowicz.util.BackgroundGeocoder
 import pl.michal.tretowicz.util.extension.FragmentArgumentDelegate
-import pl.michal.tretowicz.util.extension.WeatherCityFragment
 
 
 class DetailsFragment : BaseFragment(), OnMapReadyCallback {
