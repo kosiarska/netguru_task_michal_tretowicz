@@ -4,11 +4,14 @@ import android.graphics.Color
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import org.joda.time.DateTime
 import pl.michal.tretowicz.data.DataManager
 import pl.michal.tretowicz.data.RxEventBus
+import pl.michal.tretowicz.data.event.EventAppInBackground
+import pl.michal.tretowicz.data.event.EventAppInForeground
 import pl.michal.tretowicz.data.event.EventShowMap
 import pl.michal.tretowicz.data.model.CityColorDate
 import pl.michal.tretowicz.injection.ConfigPersistent
@@ -42,10 +45,12 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
 
     private val list = arrayListOf<CityColorDate>()
     private val random = Random()
+    private lateinit var subscription: Disposable
+    private var onlyOnce = false
 
     private fun emitValue() {
-        val city = cities[random.nextInt(cities.size - 1)]
-        val color = colorMap[colors[random.nextInt(colors.size - 1)]]!!
+        val city = cities[random.nextInt(cities.size)]
+        val color = colorMap[colors[random.nextInt(colors.size)]]!!
         val cityColorDate = CityColorDate(city, color, DateTime.now())
 
         list.add(cityColorDate)
@@ -54,17 +59,44 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
         view.showData(list)
     }
 
-    fun onPause() {
-        subscriptions.dispose()
-        subscriptions = CompositeDisposable()
-    }
-
-    fun onResume() {
-        Observable.interval(0, 5, TimeUnit.SECONDS)
+    private fun scheduleUpdates() {
+        subscription = Observable.interval(0, 5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
                             emitValue()
+                        },
+                        onError = {
+                        }
+                )
+        onlyOnce = true
+    }
+
+    override fun attachView(view: RandomCitiesMvpView) {
+        super.attachView(view)
+        if (!onlyOnce) {
+            scheduleUpdates()
+        }
+
+        rxEventBus.filteredObservable(EventAppInForeground::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            if (subscription.isDisposed) {
+                                scheduleUpdates()
+                            }
+                        },
+                        onError = {
+
+                        }
+                ).addTo(subscriptions)
+
+        rxEventBus.filteredObservable(EventAppInBackground::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            subscription.dispose()
+                            onlyOnce = false
                         },
                         onError = {
 
@@ -72,8 +104,8 @@ class RandomCitiesPresenter @Inject constructor(private val dataManager: DataMan
                 ).addTo(subscriptions)
     }
 
-    fun itemClicked(cityColorDate: CityColorDate, forTablet : Boolean) {
-        if(forTablet) {
+    fun itemClicked(cityColorDate: CityColorDate, forTablet: Boolean) {
+        if (forTablet) {
             rxEventBus.post(EventShowMap(cityColorDate.city, cityColorDate.color))
         } else {
             view.showDetailsScreen(cityColorDate.city, cityColorDate.color)

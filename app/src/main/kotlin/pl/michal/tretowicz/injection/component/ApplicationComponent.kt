@@ -3,6 +3,7 @@ package pl.michal.tretowicz.injection.component
 import android.app.Application
 import android.content.Context
 import dagger.Component
+import pl.michal.tretowicz.MyApplication
 import pl.michal.tretowicz.data.DataManager
 import pl.michal.tretowicz.data.RxEventBus
 import pl.michal.tretowicz.data.remote.ApiService
@@ -32,5 +33,7 @@ interface ApplicationComponent {
     fun passwordValidator(): PasswordValidator
 
     fun eventBus(): RxEventBus
+
+    fun inject(myApplication: MyApplication)
 
 }

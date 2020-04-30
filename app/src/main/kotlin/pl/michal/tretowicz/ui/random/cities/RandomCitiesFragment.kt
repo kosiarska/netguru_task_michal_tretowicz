@@ -37,16 +37,6 @@ class RandomCitiesFragment : BaseFragment(), RandomCitiesMvpView {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.onPause()
-    }
-
     override fun detachView() {
         super.detachView()
         presenter.detachView()
