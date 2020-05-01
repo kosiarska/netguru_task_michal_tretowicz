@@ -25,10 +25,10 @@ android {
         // You must set up an environment var before release signing
         // Run: export APP_KEY={password}
         release {
-            storeFile file('keystore/debug.keystore')
-            keyAlias 'androiddebugkey'
-            storePassword 'android'
-            keyPassword 'android'
+            storeFile file('keystore/release.keystore')
+            keyAlias 'release'
+            storePassword "release"
+            keyPassword "release"
         }
 
         debug {
