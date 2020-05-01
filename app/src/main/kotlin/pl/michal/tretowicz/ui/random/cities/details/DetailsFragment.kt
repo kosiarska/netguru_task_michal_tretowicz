@@ -15,6 +15,7 @@ import pl.michal.tretowicz.R
 import pl.michal.tretowicz.ui.base.BaseFragment
 import pl.michal.tretowicz.util.BackgroundGeocoder
 import pl.michal.tretowicz.util.extension.FragmentArgumentDelegate
+import timber.log.Timber
 
 
 class DetailsFragment : BaseFragment(), OnMapReadyCallback {
@@ -33,10 +34,14 @@ class DetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private val addressResultReceiver: ResultReceiver = object : ResultReceiver(Handler(Looper.getMainLooper())) {
         override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
-            val address = resultData.getParcelable<LatLng>(getString(R.string.address_result))
-            if (address != null) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(address, 10f))
-                mMap.addMarker(MarkerOptions().position(address).title(cityName))
+            try {
+                val address = resultData.getParcelable<LatLng>(getString(R.string.address_result))
+                if (address != null) {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(address, 10f))
+                    mMap.addMarker(MarkerOptions().position(address).title(cityName))
+                }
+            } catch (ex: IllegalStateException) {
+                Timber.e(ex, "error")
             }
         }
     }
